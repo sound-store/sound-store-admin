@@ -23,17 +23,17 @@ const data = {
   navMain: [
     {
       title: "Customers",
-      url: "#",
+      url: "/customers",
       icon: User,
     },
     {
       title: "Categories",
-      url: "#",
+      url: "/categories",
       icon: BookOpen,
     },
     {
       title: "Products",
-      url: "#",
+      url: "/products",
       icon: GalleryVerticalEnd,
     },
   ],
