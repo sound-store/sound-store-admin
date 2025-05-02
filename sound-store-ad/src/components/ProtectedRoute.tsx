@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/context/AuthContext";
 import { useEffect } from "react";
 
 export const ProtectedRoute = () => {

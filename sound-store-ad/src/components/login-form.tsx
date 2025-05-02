@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { useLogin } from "@/hooks/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/context/AuthContext";
 
 export function LoginForm({
   className,

@@ -9,7 +9,7 @@ import { Customers } from "./pages/Customers.tsx";
 import Categories from "./pages/Categories.tsx";
 import Products from "./pages/Products.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
-import { AuthProvider } from "./context/AuthContext.tsx";
+import { AuthProvider } from "./hooks/context/AuthContext.tsx";
 import { Unauthorized } from "./pages/Unauthorized.tsx";
 
 createRoot(document.getElementById("root")!).render(
