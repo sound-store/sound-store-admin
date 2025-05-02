@@ -15,7 +15,6 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-
         {/* Protected routes - require authentication */}
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<AdminLayout />}>
