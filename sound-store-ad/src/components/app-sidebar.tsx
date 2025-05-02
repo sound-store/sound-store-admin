@@ -13,7 +13,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-const navItems = [
+export const navItems = [
   {
     title: "Customers",
     url: "/customers",

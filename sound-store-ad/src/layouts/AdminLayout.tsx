@@ -1,4 +1,5 @@
-import { AppSidebar } from "@/components/app-sidebar";
+import React from "react";
+import { AppSidebar, navItems } from "@/components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,8 +14,47 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+
+interface BreadcrumbItemType {
+  name: string;
+  path: string;
+  active: boolean;
+}
+
 export default function AdminLayout() {
+  const location = useLocation();
+
+  // Get breadcrumb items from current path
+  const getBreadcrumbItems = () => {
+    const path = location.pathname;
+
+    // Get all path segments
+    const segments = path.split("/").filter(Boolean);
+
+    // If no segments, we're at the home/dashboard
+    if (segments.length === 0) {
+      return [{ name: "Dashboard", path: "/", active: true }];
+    }
+
+    // Get the current page from navigation items
+    const currentNavItem = navItems.find(
+      (item) => item.url.toLowerCase() === `/${segments[0].toLowerCase()}`
+    );
+
+    // If we found a matching nav item, use its title
+    const pageName =
+      currentNavItem?.title ||
+      segments[0].charAt(0).toUpperCase() + segments[0].slice(1);
+
+    return [
+      { name: "Home", path: "/", active: false },
+      { name: pageName, path: `/${segments[0]}`, active: true },
+    ];
+  };
+
+  const breadcrumbItems: BreadcrumbItemType[] = getBreadcrumbItems();
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -25,15 +65,22 @@ export default function AdminLayout() {
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                {breadcrumbItems.map((item, index) => (
+                  <React.Fragment key={item.path}>
+                    {index > 0 && (
+                      <BreadcrumbSeparator className="hidden md:block" />
+                    )}
+                    <BreadcrumbItem className="hidden md:block">
+                      {item.active ? (
+                        <BreadcrumbPage>{item.name}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink href={item.path}>
+                          {item.name}
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                  </React.Fragment>
+                ))}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
