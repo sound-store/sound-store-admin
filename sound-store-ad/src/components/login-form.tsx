@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { useLogin } from "@/hooks/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 export function LoginForm({
   className,
@@ -20,25 +21,32 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { login, isLoading, error } = useLogin();
+  const { login: apiLogin, isLoading, error } = useLogin();
   const navigate = useNavigate();
+
+  // Get the auth context
+  const { login, logout } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Clear any existing session
+    logout();
+
     try {
       setErrorMessage(null);
-      const response = await login({ email, password });
+      const response = await apiLogin({ email, password });
+
       if (response?.isSuccess && response.value.token) {
-        // Store token in sessionStorage
-        sessionStorage.setItem("auth-token", response.value.token);
+        // Use the login function from AuthContext to set token and fetch user data
+        await login(response.value.token);
 
-        // Set session expiration time
-        const expirationTime = new Date();
-        expirationTime.setTime(expirationTime.getTime() + 60 * 60 * 1000); // Add 60 minutes (in milliseconds)
-        sessionStorage.setItem("auth-expiration", expirationTime.toISOString());
-
-        // Redirect to home page
-        navigate("/");
+        // Check if the user is an admin
+        if (response.value.role === "Admin") {
+          navigate("/");
+        } else {
+          navigate("/unauthorized");
+        }
       } else if (response?.message) {
         setErrorMessage(response.message);
       }

@@ -3,6 +3,7 @@
 export const ENDPOINTS = {
   AUTH: {
     LOGIN: "/api/sound-store/users/login",
+    ME: "/api/sound-store/users/me",
   },
   USERS: {
     GET_ALL: "/api/sound-store/users",

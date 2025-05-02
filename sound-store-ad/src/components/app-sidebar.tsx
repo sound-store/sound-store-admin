@@ -13,40 +13,32 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+const navItems = [
+  {
+    title: "Customers",
+    url: "/customers",
+    icon: User,
   },
-  navMain: [
-    {
-      title: "Customers",
-      url: "/customers",
-      icon: User,
-    },
-    {
-      title: "Categories",
-      url: "/categories",
-      icon: BookOpen,
-    },
-    {
-      title: "Products",
-      url: "/products",
-      icon: GalleryVerticalEnd,
-    },
-  ],
-};
+  {
+    title: "Categories",
+    url: "/categories",
+    icon: BookOpen,
+  },
+  {
+    title: "Products",
+    url: "/products",
+    icon: GalleryVerticalEnd,
+  },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navItems} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

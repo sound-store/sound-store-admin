@@ -1,15 +1,32 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
 
 export const ProtectedRoute = () => {
-  // Check if user is authenticated by looking for the token in sessionStorage
-  const token = sessionStorage.getItem("auth-token");
-  const expirationTime = sessionStorage.getItem("auth-expiration");
+  const { user, isAuthenticated, isLoading, refreshUserData } = useAuth();
 
   // Check if token exists and is not expired
-  const isAuthenticated = !!token;
+  const token = sessionStorage.getItem("auth-token");
+  const expirationTime = sessionStorage.getItem("auth-expiration");
   const isExpired = expirationTime
     ? new Date() > new Date(expirationTime)
     : false;
+
+  // Refresh user data when component mounts if token exists
+  useEffect(() => {
+    if (token && !isExpired && !isAuthenticated) {
+      refreshUserData();
+    }
+  }, [token, isExpired, isAuthenticated, refreshUserData]);
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
 
   // If token is expired, clear it and redirect to login
   if (isExpired && token) {
@@ -23,6 +40,11 @@ export const ProtectedRoute = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // If authenticated and not expired, render the child routes
+  // Check if user has Admin role
+  if (user?.role !== "Admin") {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  // If authenticated, not expired, and has admin role, render the child routes
   return <Outlet />;
 };

@@ -9,22 +9,27 @@ import { Customers } from "./pages/Customers.tsx";
 import Categories from "./pages/Categories.tsx";
 import Products from "./pages/Products.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
+import { Unauthorized } from "./pages/Unauthorized.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        {/* Protected routes - require authentication */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<AdminLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/products" element={<Products />} />
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          {/* Protected routes - require authentication */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<AdminLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/products" element={<Products />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 );
