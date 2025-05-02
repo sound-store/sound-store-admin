@@ -31,6 +31,12 @@ export function LoginForm({
       if (response?.isSuccess && response.value.token) {
         // Store token in sessionStorage
         sessionStorage.setItem("auth-token", response.value.token);
+
+        // Set session expiration time
+        const expirationTime = new Date();
+        expirationTime.setTime(expirationTime.getTime() + 60 * 60 * 1000); // Add 60 minutes (in milliseconds)
+        sessionStorage.setItem("auth-expiration", expirationTime.toISOString());
+
         // Redirect to home page
         navigate("/");
       } else if (response?.message) {

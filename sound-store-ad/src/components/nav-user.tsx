@@ -42,6 +42,8 @@ export function NavUser({
   const handleLogout = () => {
     // Clear authentication token and user info from session storage
     sessionStorage.removeItem("auth-token");
+    sessionStorage.removeItem("auth-expiration");
+
     // Redirect to login page
     navigate("/login");
   };
