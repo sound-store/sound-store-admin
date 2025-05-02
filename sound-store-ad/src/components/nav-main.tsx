@@ -1,5 +1,3 @@
-"use client";
-
 import { type LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -21,7 +19,7 @@ interface NavItem {
 export function NavMain({ items }: Readonly<{ items: NavItem[] }>) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>SoundStore</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
