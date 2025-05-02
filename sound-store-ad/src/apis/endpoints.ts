@@ -9,5 +9,11 @@ export const ENDPOINTS = {
     GET_ALL: "/api/sound-store/users",
     GET_BY_ID: (id: string) => `/api/sound-store/users/${id}`,
   },
-  // Add more endpoint categories as needed
+  CATEGORIES: {
+    GET_BY_ID: (id: number) => `/api/sound-store/categories/${id}`,
+    PAGINATED: (pageNumber: number, pageSize: number) =>
+      `/api/sound-store/categories/pageNumber/${pageNumber}/pageSize/${pageSize}`,
+  },
+  PRODUCTS: {},
+  CUSTOMERS: {},
 };
