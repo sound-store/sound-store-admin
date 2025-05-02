@@ -8,8 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye } from "lucide-react";
 import { useCategories } from "@/hooks/categories";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
   const { categories, loading, error } = useCategories();
@@ -55,12 +57,13 @@ const Categories = () => {
                 <TableHead className="w-[150px] text-right">
                   Updated At
                 </TableHead>
+                <TableHead className="w-[100px] text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {categories.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center">
+                  <TableCell colSpan={5} className="h-24 text-center">
                     No categories found
                   </TableCell>
                 </TableRow>
@@ -70,12 +73,29 @@ const Categories = () => {
                     <TableCell className="font-medium">
                       {category.name}
                     </TableCell>
-                    <TableCell>{category.description}</TableCell>
+                    <TableCell>
+                      {category.description.length > 50
+                        ? `${category.description.substring(0, 50)}...`
+                        : category.description}
+                    </TableCell>
                     <TableCell className="text-right">
                       {formatDate(category.createdAt)}
                     </TableCell>
                     <TableCell className="text-right">
                       {category.updatedAt ? formatDate(category.updatedAt) : ""}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        asChild
+                        className="p-0 h-8 w-8"
+                      >
+                        <Link to={`/categories/${category.id}`}>
+                          <Eye className="h-4 w-4" />
+                          <span className="sr-only">View details</span>
+                        </Link>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
