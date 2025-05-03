@@ -6,8 +6,10 @@ export const ENDPOINTS = {
     ME: "/api/sound-store/users/me",
   },
   USERS: {
-    GET_ALL: "/api/sound-store/users",
-    GET_BY_ID: (id: string) => `/api/sound-store/users/${id}`,
+    PAGINATED_CUSTOMERS: (pageNumber: number, pageSize: number) =>
+      `/api/sound-store/customers/pageNumber/${pageNumber}/pageSize/${pageSize}`,
+    GET_CUSTOMER_BY_ID: (id: string) => `/api/sound-store/customers/${id}`,
+    UPDATE_CUSTOMER_STATUS: (id: string) => `/api/sound-store/customer/${id}`,
   },
   CATEGORIES: {
     GET_BY_ID: (id: number) => `/api/sound-store/categories/${id}`,
@@ -17,6 +19,12 @@ export const ENDPOINTS = {
     UPDATE: (id: number) => `/api/sound-store/category/${id}`,
     DELETE: (id: number) => `/api/sound-store/category/${id}`,
   },
-  PRODUCTS: {},
-  CUSTOMERS: {},
+  PRODUCTS: {
+    PAGINATED: (pageNumber: number, pageSize: number) =>
+      `/api/sound-store/products/pageNumber/${pageNumber}/pageSize/${pageSize}`,
+    GET_BY_ID: (id: number) => `/api/sound-store/products/${id}`,
+    CREATE: "/api/sound-store/product",
+    UPDATE: (id: number) => `/api/sound-store/product/${id}`,
+    DELETE: (id: number) => `/api/sound-store/product/${id}`,
+  },
 };
