@@ -95,10 +95,18 @@ export default function Products() {
                 </TableRow>
               ) : (
                 products.items.map((product) => (
-                  <TableRow key={product.id}>
+                  <TableRow
+                    key={product.id}
+                    className="cursor-pointer hover:bg-muted/50"
+                  >
                     <TableCell>{product.id}</TableCell>
                     <TableCell className="font-medium">
-                      {product.name}
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="hover:underline"
+                      >
+                        {product.name}
+                      </Link>
                     </TableCell>
                     <TableCell>
                       {product.description.length > 40
@@ -127,7 +135,7 @@ export default function Products() {
                         asChild
                         className="p-0 h-8 w-8"
                       >
-                        <Link to={`/products/${product.id}`}>
+                        <Link to={`/product/${product.id}`}>
                           <Eye className="h-4 w-4" />
                           <span className="sr-only">View details</span>
                         </Link>

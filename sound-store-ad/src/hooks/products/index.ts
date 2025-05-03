@@ -33,6 +33,12 @@ export interface Product {
   categoryName: string;
   status: string;
   images: ProductImage[];
+  overallRatingScore?: number;
+  ratingResponses?: Array<{
+    userName: string;
+    ratingPoint: number;
+    comment: string;
+  }>;
 }
 
 export interface ProductsResponse {
@@ -104,5 +110,56 @@ export const useProducts = (initialPage = 1, pageSize = 10) => {
     page,
     handlePageChange,
     refetch: () => fetchProducts(page, pageSize),
+  };
+};
+
+export const useProductDetail = (productId: number | string) => {
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchProductDetail = async (id: number | string) => {
+    try {
+      setLoading(true);
+      // Get the authentication token from session storage
+      const token = sessionStorage.getItem("auth-token");
+
+      const response = await axios.get<ApiResponse<Product>>(
+        buildApiUrl(ENDPOINTS.PRODUCTS.GET_BY_ID(Number(id))),
+        {
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : undefined,
+        }
+      );
+
+      if (response.data.isSuccess) {
+        setProduct(response.data.value);
+        setError(null);
+      } else {
+        setError(response.data.message || "Failed to fetch product details");
+        console.error("API Error:", response.data.message);
+      }
+    } catch (err) {
+      setError("Failed to fetch product details");
+      console.error("Fetch Error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (productId) {
+      fetchProductDetail(productId);
+    }
+  }, [productId]);
+
+  return {
+    product,
+    loading,
+    error,
+    refetch: () => fetchProductDetail(productId),
   };
 };
