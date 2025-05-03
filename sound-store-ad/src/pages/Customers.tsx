@@ -12,9 +12,17 @@ import { Loader2, Eye } from "lucide-react";
 import { useCustomers } from "@/hooks/customers";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Pagination } from "@/components/ui/pagination";
 
 export function Customers() {
-  const { customers, loading, error, getUserStatusLabel } = useCustomers();
+  const {
+    customers,
+    paginationInfo,
+    loading,
+    error,
+    getUserStatusLabel,
+    changePage,
+  } = useCustomers();
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "";
@@ -83,15 +91,17 @@ export function Customers() {
                 customers.map((customer) => (
                   <TableRow key={customer.id}>
                     <TableCell className="font-medium">
-                      {customer.fullName}
+                      {customer.fullName || "—"}
                     </TableCell>
                     <TableCell>{customer.phoneNumber}</TableCell>
                     <TableCell>
                       {customer.address?.length > 30
                         ? `${customer.address.substring(0, 30)}...`
-                        : customer.address || ""}
+                        : customer.address || "—"}
                     </TableCell>
-                    <TableCell>{formatDate(customer.dateOfBirth)}</TableCell>
+                    <TableCell>
+                      {formatDate(customer.dateOfBirth) || "—"}
+                    </TableCell>
                     <TableCell>
                       <span
                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusColor(
@@ -119,6 +129,23 @@ export function Customers() {
               )}
             </TableBody>
           </Table>
+
+          {customers.length > 0 && (
+            <>
+              <p className="text-center text-sm text-muted-foreground mt-4">
+                Showing {customers.length} of {paginationInfo.totalItems}{" "}
+                customers (Page {paginationInfo.currentPage} of{" "}
+                {paginationInfo.totalPages})
+              </p>
+              <div className="mt-4 flex justify-center">
+                <Pagination
+                  currentPage={paginationInfo.currentPage}
+                  totalPages={paginationInfo.totalPages}
+                  onPageChange={changePage}
+                />
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

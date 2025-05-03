@@ -273,11 +273,11 @@ const CategoryDetail = () => {
         // Check if we have a valid response object
         if (data) {
           // If the data is nested inside a "value" property (common API pattern)
-          const categoryData = data.value || data;
+          const categoryData = data.value ?? data;
 
           setCategory(categoryData);
-          setUpdateName(categoryData.name || "");
-          setUpdateDescription(categoryData.description || "");
+          setUpdateName(categoryData.name ?? "");
+          setUpdateDescription(categoryData.description ?? "");
           console.log("Processed category data:", categoryData);
         } else {
           throw new Error("Invalid data format received from API");

@@ -9,9 +9,12 @@ export enum UserState {
 
 export interface Customer {
   id: string;
+  firstName: string;
+  lastName: string;
   fullName: string;
   phoneNumber: string;
   address: string;
+  email: string;
   dateOfBirth: string;
   status: string;
 }
@@ -151,6 +154,11 @@ export function useCustomers() {
     }
   };
 
+  // Helper function to get full name from first and last name
+  const getFullName = (firstName: string, lastName: string): string => {
+    return `${firstName} ${lastName}`.trim();
+  };
+
   useEffect(() => {
     fetchCustomers();
   }, [paginationInfo.currentPage, paginationInfo.pageSize, fetchCustomers]);
@@ -165,5 +173,6 @@ export function useCustomers() {
     changePage,
     changePageSize,
     getUserStatusLabel,
+    getFullName,
   };
 }

@@ -14,9 +14,17 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { AddCategoryDialog } from "@/components/categories/AddCategoryDialog";
 import { useCallback } from "react";
+import { Pagination } from "@/components/ui/pagination";
 
 const Categories = () => {
-  const { categories, loading, error, fetchCategories } = useCategories();
+  const {
+    categories,
+    paginationInfo,
+    loading,
+    error,
+    fetchCategories,
+    changePage,
+  } = useCategories();
 
   const handleCategoryAdded = useCallback(() => {
     fetchCategories();
@@ -113,6 +121,23 @@ const Categories = () => {
               )}
             </TableBody>
           </Table>
+
+          {categories.length > 0 && (
+            <>
+              <p className="text-center text-sm text-muted-foreground mt-4">
+                Showing {categories.length} of {paginationInfo.totalItems}{" "}
+                categories (Page {paginationInfo.currentPage} of{" "}
+                {paginationInfo.totalPages})
+              </p>
+              <div className="mt-4 flex justify-center">
+                <Pagination
+                  currentPage={paginationInfo.currentPage}
+                  totalPages={paginationInfo.totalPages}
+                  onPageChange={changePage}
+                />
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

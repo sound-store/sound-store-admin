@@ -11,7 +11,7 @@ export function Pagination({
   currentPage,
   totalPages,
   onPageChange,
-}: PaginationProps) {
+}: Readonly<PaginationProps>) {
   const handlePrevious = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);

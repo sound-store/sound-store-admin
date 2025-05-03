@@ -161,15 +161,27 @@ const CustomerDetails = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                  Full Name
+                  First Name
                 </h3>
-                <p className="mt-1 text-base">{customer.fullName}</p>
+                <p className="mt-1 text-base">{customer.firstName || "—"}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Last Name
+                </h3>
+                <p className="mt-1 text-base">{customer.lastName || "—"}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Email
+                </h3>
+                <p className="mt-1 text-base">{customer.email || "—"}</p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   Phone Number
                 </h3>
-                <p className="mt-1 text-base">{customer.phoneNumber}</p>
+                <p className="mt-1 text-base">{customer.phoneNumber || "—"}</p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
