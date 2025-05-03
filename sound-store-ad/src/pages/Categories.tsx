@@ -12,9 +12,15 @@ import { Loader2, Eye } from "lucide-react";
 import { useCategories } from "@/hooks/categories";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { AddCategoryDialog } from "@/components/categories/AddCategoryDialog";
+import { useCallback } from "react";
 
 const Categories = () => {
-  const { categories, loading, error } = useCategories();
+  const { categories, loading, error, fetchCategories } = useCategories();
+
+  const handleCategoryAdded = useCallback(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "";
@@ -35,7 +41,12 @@ const Categories = () => {
 
   return (
     <div className="w-full py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6">Categories</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Categories</h1>
+        <div className="flex justify-end">
+          <AddCategoryDialog onCategoryAdded={handleCategoryAdded} />
+        </div>
+      </div>
 
       {loading ? (
         <div className="h-[200px] w-full flex items-center justify-center">
@@ -74,9 +85,9 @@ const Categories = () => {
                       {category.name}
                     </TableCell>
                     <TableCell>
-                      {category.description.length > 50
+                      {category.description?.length > 50
                         ? `${category.description.substring(0, 50)}...`
-                        : category.description}
+                        : category.description || ""}
                     </TableCell>
                     <TableCell className="text-right">
                       {formatDate(category.createdAt)}

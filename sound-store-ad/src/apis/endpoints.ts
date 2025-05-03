@@ -10,12 +10,12 @@ export const ENDPOINTS = {
     GET_BY_ID: (id: string) => `/api/sound-store/users/${id}`,
   },
   CATEGORIES: {
-    GET_BY_ID: (id: number) => `/api/sound-store/category/${id}`,
+    GET_BY_ID: (id: number) => `/api/sound-store/categories/${id}`,
     PAGINATED: (pageNumber: number, pageSize: number) =>
       `/api/sound-store/categories/pageNumber/${pageNumber}/pageSize/${pageSize}`,
-    CREATE: "/api/sound-store/categories",
-    UPDATE: (id: number) => `/api/sound-store/categories/${id}`,
-    DELETE: (id: number) => `/api/sound-store/categories/${id}`,
+    CREATE: "/api/sound-store/category",
+    UPDATE: (id: number) => `/api/sound-store/category/${id}`,
+    DELETE: (id: number) => `/api/sound-store/category/${id}`,
   },
   PRODUCTS: {},
   CUSTOMERS: {},

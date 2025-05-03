@@ -148,6 +148,43 @@ export function useCategories() {
     }
   };
 
+  const createCategory = async (
+    name: string,
+    description?: string
+  ): Promise<{ success: boolean; message: string }> => {
+    try {
+      const endpoint = ENDPOINTS.CATEGORIES.CREATE;
+      const response = await fetch(buildApiUrl(endpoint), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description: description || "",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.isSuccess) {
+        // Don't call fetchCategories here since we'll do it from the component
+        return {
+          success: true,
+          message: data.message ?? "Category created successfully",
+        };
+      } else {
+        return {
+          success: false,
+          message: data.message ?? "Failed to create category",
+        };
+      }
+    } catch (error) {
+      console.error("Error creating category:", error);
+      return { success: false, message: "An unexpected error occurred" };
+    }
+  };
+
   // Helper function to check if a date string is valid
   function isValidDateString(dateString: string | null | undefined): boolean {
     if (!dateString) return false;
@@ -170,5 +207,6 @@ export function useCategories() {
     getCategory,
     changePage,
     changePageSize,
+    createCategory,
   };
 }
