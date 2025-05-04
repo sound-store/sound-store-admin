@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2, Eye } from "lucide-react";
+import { Loader2, Eye, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useProducts } from "@/hooks/products";
@@ -65,6 +65,12 @@ export default function Products() {
     <div className="w-full py-10 px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Products</h1>
+        <Button asChild>
+          <Link to="/product/add">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Product
+          </Link>
+        </Button>
       </div>
 
       {loading ? (
