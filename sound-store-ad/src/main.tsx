@@ -11,6 +11,7 @@ import CategoryDetail from "./pages/CategoryDetail.tsx";
 import Products from "./pages/Products.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
 import AddProduct from "./pages/AddProduct.tsx";
+import EditProduct from "./pages/EditProduct.tsx";
 import CustomerDetails from "./pages/CustomerDetails.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import { AuthProvider } from "./hooks/context/AuthContext.tsx";
@@ -33,6 +34,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/categories/:id" element={<CategoryDetail />} />
               <Route path="/products" element={<Products />} />
               <Route path="/product/add" element={<AddProduct />} />
+              <Route path="/product/edit/:id" element={<EditProduct />} />
               <Route path="/product/:id" element={<ProductDetail />} />
             </Route>
           </Route>

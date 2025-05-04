@@ -205,3 +205,71 @@ export const deleteProduct = async (
     };
   }
 };
+
+// Function to update a product using JSON
+export const updateProduct = async (
+  productId: number,
+  data: {
+    name: string;
+    description: string;
+    stockQuantity: number;
+    price: number;
+    type: string;
+    connectivity: string;
+    specialFeatures: string;
+    frequencyResponse: string;
+    sensitivity: string;
+    batteryLife: string;
+    accessoriesIncluded: string;
+    warranty: string;
+    subCategoryId: number;
+    status: string;
+  }
+): Promise<{
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+}> => {
+  try {
+    // Get the authentication token from session storage
+    const token = sessionStorage.getItem("auth-token");
+
+    if (!token) {
+      return { success: false, message: "Authentication required" };
+    }
+
+    const response = await fetch(
+      buildApiUrl(ENDPOINTS.PRODUCTS.UPDATE(productId)),
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    const result = await response.json();
+
+    if (result.isSuccess) {
+      return {
+        success: true,
+        message: result.message ?? "Product updated successfully",
+      };
+    } else {
+      console.error("API Error:", result.message);
+      return {
+        success: false,
+        message: result.message ?? "Failed to update product",
+        errors: result.errors,
+      };
+    }
+  } catch (err) {
+    console.error("Update Error:", err);
+    return {
+      success: false,
+      message: "An error occurred while updating the product",
+    };
+  }
+};

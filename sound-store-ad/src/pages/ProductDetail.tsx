@@ -79,8 +79,9 @@ export default function ProductDetail() {
   };
 
   const handleEdit = () => {
-    console.log("Edit product:", product?.id);
-    // Implement edit functionality or navigation to edit page
+    if (product) {
+      navigate(`/product/edit/${product.id}`);
+    }
   };
 
   const handleDeleteClick = () => {
