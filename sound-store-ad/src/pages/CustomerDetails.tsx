@@ -80,14 +80,14 @@ const CustomerDetails = () => {
       setUpdateSuccess(false);
 
       const endpoint = ENDPOINTS.USERS.UPDATE_CUSTOMER_STATUS(id);
-      const response = await fetch(buildApiUrl(endpoint), {
-        method: "PUT",
+      const url = new URL(buildApiUrl(endpoint));
+      url.searchParams.append("status", currentStatus);
+
+      const response = await fetch(url.toString(), {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          status: currentStatus,
-        }),
       });
 
       const data = await response.json();

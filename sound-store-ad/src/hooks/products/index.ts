@@ -163,3 +163,45 @@ export const useProductDetail = (productId: number | string) => {
     refetch: () => fetchProductDetail(productId),
   };
 };
+
+// Function to delete a product
+export const deleteProduct = async (
+  productId: number
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    // Get the authentication token from session storage
+    const token = sessionStorage.getItem("auth-token");
+
+    if (!token) {
+      return { success: false, message: "Authentication required" };
+    }
+
+    const response = await axios.delete<ApiResponse<null>>(
+      buildApiUrl(ENDPOINTS.PRODUCTS.DELETE(productId)),
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.isSuccess) {
+      return {
+        success: true,
+        message: response.data.message || "Product deleted successfully",
+      };
+    } else {
+      console.error("API Error:", response.data.message);
+      return {
+        success: false,
+        message: response.data.message || "Failed to delete product",
+      };
+    }
+  } catch (err) {
+    console.error("Delete Error:", err);
+    return {
+      success: false,
+      message: "An error occurred while deleting the product",
+    };
+  }
+};

@@ -1,5 +1,5 @@
-import { useParams, Link } from "react-router-dom";
-import { useProductDetail } from "@/hooks/products";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useProductDetail, deleteProduct } from "@/hooks/products";
 import { Loader2, ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,11 +13,24 @@ import {
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { product, loading, error } = useProductDetail(id ?? "");
+  const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   // Debug logging
   useEffect(() => {
@@ -70,9 +83,35 @@ export default function ProductDetail() {
     // Implement edit functionality or navigation to edit page
   };
 
-  const handleDelete = () => {
-    console.log("Delete product:", product?.id);
-    // Implement delete functionality with confirmation
+  const handleDeleteClick = () => {
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!product) return;
+
+    try {
+      setIsDeleting(true);
+      const result = await deleteProduct(product.id);
+
+      if (result.success) {
+        alert("Product deleted successfully");
+        // Navigate back to products page
+        navigate("/products");
+      } else {
+        alert(`Error: ${result.message}`);
+      }
+    } catch (err) {
+      console.error("Error deleting product:", err);
+      alert("An unexpected error occurred while deleting the product");
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteDialog(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
   };
 
   if (error) {
@@ -147,9 +186,14 @@ export default function ProductDetail() {
             <Button
               variant="outline"
               className="flex-1 bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
-              onClick={handleDelete}
+              onClick={handleDeleteClick}
+              disabled={isDeleting}
             >
-              <Trash2 className="h-4 w-4 mr-2" />
+              {isDeleting ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Trash2 className="h-4 w-4 mr-2" />
+              )}
               Delete
             </Button>
           </CardFooter>
@@ -261,6 +305,37 @@ export default function ProductDetail() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              product "{product.name}" and remove it from the database.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                "Delete"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
